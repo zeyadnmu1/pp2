@@ -300,7 +300,14 @@ class TasteModel:
     
     def _tune_lightgbm(self, X: np.ndarray, y: np.ndarray) -> Dict:
         """Tune LightGBM hyperparameters."""
-        from optuna import create_study, Trial
+        if not LIGHTGBM_AVAILABLE:
+            raise ImportError("LightGBM is not available for hyperparameter tuning.")
+        
+        try:
+            from optuna import create_study, Trial
+        except ImportError:
+            logger.warning("Optuna not available for hyperparameter tuning")
+            return {}
         
         def objective(trial: Trial) -> float:
             params = {

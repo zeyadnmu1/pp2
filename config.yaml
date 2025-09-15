@@ -1,0 +1,133 @@
+# Spotify API Configuration
+spotify:
+  client_id: ${SPOTIFY_CLIENT_ID}
+  client_secret: ${SPOTIFY_CLIENT_SECRET}
+  redirect_uri: "http://localhost:8080/callback"
+  scope: "user-library-read playlist-read-private playlist-modify-public playlist-modify-private user-top-read"
+
+# Data Configuration
+data:
+  cache_dir: "data/cache"
+  raw_data_dir: "data/raw"
+  processed_data_dir: "data/processed"
+  models_dir: "data/models"
+  max_tracks_per_request: 50
+  cache_expiry_hours: 24
+
+# Feature Engineering
+features:
+  audio_features:
+    - "acousticness"
+    - "danceability" 
+    - "energy"
+    - "instrumentalness"
+    - "liveness"
+    - "loudness"
+    - "speechiness"
+    - "tempo"
+    - "valence"
+  
+  mood_thresholds:
+    happy:
+      valence_min: 0.6
+      energy_min: 0.5
+    sad:
+      valence_max: 0.4
+      energy_max: 0.5
+    energetic:
+      energy_min: 0.7
+      tempo_min: 120
+    calm:
+      energy_max: 0.4
+      valence_range: [0.3, 0.7]
+  
+  engineered_features:
+    tempo_bands:
+      slow: [0, 90]
+      medium: [90, 140]
+      fast: [140, 200]
+    energy_bands:
+      low: [0, 0.33]
+      medium: [0.33, 0.66]
+      high: [0.66, 1.0]
+
+# Model Configuration
+models:
+  taste_model:
+    algorithm: "lightgbm"
+    params:
+      objective: "binary"
+      metric: "binary_logloss"
+      boosting_type: "gbdt"
+      num_leaves: 31
+      learning_rate: 0.05
+      feature_fraction: 0.9
+      bagging_fraction: 0.8
+      bagging_freq: 5
+      verbose: 0
+    
+  baseline_model:
+    algorithm: "logistic_regression"
+    params:
+      C: 1.0
+      max_iter: 1000
+      random_state: 42
+
+# Recommendation Engine
+recommendation:
+  default_playlist_size: 20
+  exploration_ratio: 0.2  # 20% exploration, 80% exploitation
+  diversity_weight: 0.1
+  novelty_weight: 0.1
+  
+  filtering:
+    min_popularity: 10
+    max_duplicates: 2
+    exclude_explicit: false
+  
+  reranking:
+    taste_weight: 0.6
+    mood_weight: 0.3
+    diversity_weight: 0.1
+
+# Evaluation
+evaluation:
+  metrics:
+    - "precision_at_k"
+    - "recall_at_k" 
+    - "diversity_score"
+    - "novelty_score"
+  k_values: [5, 10, 20]
+  test_split: 0.2
+  validation_split: 0.2
+
+# UI Configuration
+ui:
+  theme: "dark"
+  page_title: "Playlist Auto-DJ"
+  page_icon: "🎵"
+  
+  mood_options:
+    - "Happy & Upbeat"
+    - "Calm & Relaxed"
+    - "Energetic & Pumped"
+    - "Melancholic & Reflective"
+    - "Focus & Concentration"
+    - "Party & Dance"
+  
+  tempo_range: [60, 200]
+  energy_range: [0.0, 1.0]
+  valence_range: [0.0, 1.0]
+
+# Logging
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/playlist_auto_dj.log"
+
+# Performance
+performance:
+  batch_size: 100
+  max_workers: 4
+  cache_size: 1000
+  timeout_seconds: 30

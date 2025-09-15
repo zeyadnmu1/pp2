@@ -71,21 +71,54 @@ playlist-auto-dj/
 
 ## 🚀 Quick Start
 
-1. **Setup Environment**:
+### Production Version (Full Spotify Integration)
+```bash
+# 1. Setup (automated)
+python setup_production.py
+
+# 2. Set your Spotify API credentials
+export SPOTIFY_CLIENT_ID=your_client_id
+export SPOTIFY_CLIENT_SECRET=your_client_secret
+
+# 3. Run the full application
+python run_production.py
+```
+
+### Demo Version (No Spotify Required)
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Run demo with mock data
+streamlit run test_streamlit_app.py
+```
+
+## 📖 Detailed Setup
+
+### For Production Use (Real Spotify Data)
+1. **Get Spotify API Credentials**:
+   - Go to [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
+   - Create new app: "Playlist Auto-DJ"
+   - Set Redirect URI: `http://localhost:8080/callback`
+   - Copy Client ID and Client Secret
+
+2. **Run Setup Script**:
    ```bash
-   git clone <repository>
-   cd playlist-auto-dj
-   pip install -r requirements.txt
+   python setup_production.py
    ```
 
-2. **Configure Spotify API**:
-   - Create Spotify App at https://developer.spotify.com/
-   - Add credentials to `config/config.yaml`
-
-3. **Run Application**:
+3. **Launch Application**:
    ```bash
-   streamlit run src/app/streamlit_app.py
+   python run_production.py
    ```
+
+### For Demo/Testing
+```bash
+pip install -r requirements.txt
+streamlit run test_streamlit_app.py
+```
+
+**📋 See [PRODUCTION_GUIDE.md](PRODUCTION_GUIDE.md) for detailed instructions**
 
 ## 📈 Development Roadmap
 

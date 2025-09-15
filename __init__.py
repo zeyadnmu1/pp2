@@ -1,7 +1,7 @@
 """
-Web application and user interface modules.
+Evaluation and metrics modules.
 """
 
-from .streamlit_app import PlaylistAutoDJApp
+from .metrics import RecommendationEvaluator
 
-__all__ = ["PlaylistAutoDJApp"]
+__all__ = ["RecommendationEvaluator"]
